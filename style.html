@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Style - Task3</title>
+<style>
+  main {
+    background-color: #fbf2e9;
+    width: 450px;
+  }
+  form {
+    padding: 10px;
+  }
+  textarea {
+    margin: 10px 0;
+    width: 90%;
+  }
+  p {
+    text-wrap: wrap;
+    border: 1px solid grey;
+    border-radius: 2%;
+    padding: 5px;
+    margin: 5px;
+  }
+  input[type = "submit"] {
+    width: 92%;
+    margin-bottom: 20px;
+  }
+</style>
+  <script>
+    window.onload = () => {
+
+      document.forms[0].addEventListener("submit", submitHandler);
+
+
+
+      function submitHandler(event) {
+        event.preventDefault();
+        let radios = document.querySelectorAll(`input[type = "radio"]`);
+        let radioValue = "";
+        for (let i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            radioValue += radios[i].getAttribute("id");
+            radios[i].checked = false;
+            break;
+          }
+        }
+
+        if (document.querySelector("div")) {
+          document.querySelector("div").remove();
+        }
+
+        let div = document.createElement("div");
+        let p1 = document.createElement("p");
+        p1.innerText = "Result:";
+        p1.style.fontWeight = "bold";
+        p1.style.fontSize = "24px";
+        p1.style.border = "none";
+        p1.style.marginBottom = "5px";
+        div.appendChild(p1);
+
+        let p = document.createElement("p");
+        p.innerText = document.querySelector("textarea").value;
+        p.style.textAlign = radioValue;
+
+        if (document.querySelector("#bold").checked) {
+          p.style.fontWeight = "bold";
+          /*document.querySelector("#bold").checked = false;*/
+        } else {
+          p.style.fontWeight = ""
+        }
+        if (document.querySelector("#italics").checked) {
+          p.style.fontFamily = "Italic";
+          /*document.querySelector("#italics").checked = false;*/
+        } else {
+          p.style.fontFamily = "";
+        }
+        if (document.querySelector("#underline").checked) {
+          p.style.textDecoration = "underline";
+          /*document.querySelector("#underline").checked = false;*/
+        } else {
+          p.style.textDecoration = "";
+        }
+        div.appendChild(p);
+
+        document.querySelector("main").appendChild(div);
+
+      }
+    }
+  </script>
+</head>
+<body>
+
+<main>
+  <form>
+    <input type="checkbox" name="bold" id="bold"><label for="bold">Bold</label>
+    <input type="checkbox" name="underline" id="underline"><label for="underline">Underline</label>
+    <input type="checkbox" name="italics" id="italics"><label for="italics">Italics</label>
+    <input type="radio" name="position" id="left"><label for="left">Left</label>
+    <input type="radio" name="position" id="right"><label for="right">Right</label>
+    <input type="radio" name="position" id="justify"><label for="justify">Justify</label> <br>
+    <textarea rows="8"></textarea><br>
+    <input type="submit" value="Show text">
+  </form>
+</main>
+
+</body>
+</html>
