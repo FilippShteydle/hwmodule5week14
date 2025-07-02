@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task05</title>
+    <style>
+        section {
+            background-color: #fbf2e9;
+            width: 450px;
+        }
+
+        label {
+            margin: 10px 0 10px 10px;
+            padding: 5px;
+        }
+
+        select {
+            margin: 10px 10px 10px 0;
+            width: 85px;
+            padding: 5px;
+        }
+
+        button {
+            padding: 5px;
+            width: 80px;
+            margin-left: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 20px;
+        }
+
+        tr {
+            border-bottom: 1px dotted black;
+
+        }
+
+        th, td {
+            text-align: left;
+            padding: 5px;
+        }
+
+        th {
+            width: 300px;
+        }
+    </style>
+    <script>
+        window.onload = () => {
+
+            let allInformation = [];
+
+            let groups = [
+                {
+                    name: "Group 1",
+                    students: [
+                        {
+                            fullName: "Ivanov Ivan",
+                            checked: false
+                        },
+                        {
+                            fullName: "Petrov Petr",
+                            checked: false
+                        },
+                        {
+                            fullName: "Semenov Semen",
+                            checked: false
+                        },
+                        {
+                            fullName: "Maxsimov Maxsim",
+                            checked: false
+                        },
+                    ]
+                },
+                {
+                    name: "Group 2",
+                    students: [
+                        {
+                            fullName: "Jon Lennon",
+                            checked: false
+                        },
+                        {
+                            fullName: "Paul McCartney",
+                            checked: false
+                        },
+                        {
+                            fullName: "Ozzy Osbourne",
+                            checked: false
+                        },
+                        {
+                            fullName: "Freddie Mercury",
+                            checked: false
+                        },
+                    ]
+                },
+                {
+                    name: "Group 3",
+                    students: [
+                        {
+                            fullName: "Cristiano Ronaldo",
+                            checked: false
+                        },
+                        {
+                            fullName: "Petr Cheh",
+                            checked: false
+                        },
+                        {
+                            fullName: "Toni Croose",
+                            checked: false
+                        },
+                        {
+                            fullName: "David De Hea",
+                            checked: false
+                        },
+                    ]
+                },
+            ];
+
+            function loadGroups() {
+                for (let i = 0; i < groups.length; i++) {
+                    let option = document.createElement("option");
+                    option.setAttribute("value", i);
+                    option.innerText = groups[i].name;
+                    document.querySelector("#groups").appendChild(option);
+                }
+            }
+
+            loadGroups();
+
+            document.querySelector("#select").addEventListener("click", clickHandlerSelect);
+
+            let div = document.createElement("div");
+
+            function clickHandlerSelect(event) {
+
+                document.querySelector("div").replaceChildren();
+                let numGroups = document.querySelector("#groups").value;
+                let lesson = document.querySelector("#lessons").value;
+                let group = [];
+
+                let label = document.createElement("label");
+                label.setAttribute("for", "topic");
+                label.innerText = "Topic:";
+                let input = document.createElement("input");
+                input.setAttribute("type", "text");
+                input.setAttribute("id", "topic");
+                input.style.width = 360 + "px";
+                input.style.padding = 5 + "px";
+
+                div.append(label, input);
+
+                if (loadInformation(numGroups, lesson) !== null) {
+                    createTable(loadInformation(numGroups, lesson));
+                } else {
+                    createTable(groups[numGroups].students);
+                }
+            }
+
+
+        function loadInformation(numGroups, lesson) {
+            for (let i = 0; i < allInformation.length; i++) {
+                if (allInformation[i].lesson === lesson && allInformation[i].group === numGroups) {
+                    document.querySelector("#topic").value = allInformation[i].topic;
+                    return allInformation[i].students;
+                }
+            }
+            return null;
+        }
+
+        function clickHandlerSave(event) {
+            let numGroups = document.querySelector("#groups").value;
+            let lesson = document.querySelector("#lessons").value;
+            let topic = document.querySelector("#topic").value;
+            let checkboxes = document.querySelectorAll(`input[type = "checkbox"]`);
+            let groupsStudents = [];
+
+            for (let i = 0; i < checkboxes.length; i++) {
+                let name = groups[numGroups].students[i].fullName;
+                let cont = checkboxes[i].checked;
+                groupsStudents.push({
+                    fullName: name,
+                    checked: cont
+                },);
+            }
+
+            allInformation.push({
+                topic: topic,
+                lesson: lesson,
+                group: numGroups,
+                students: groupsStudents
+            });
+        }
+
+        function createTable(group) {
+            let table = document.createElement("table");
+            let tr = document.createElement("tr");
+            let th1 = document.createElement("th");
+            let th2 = document.createElement("th");
+            th1.innerText = "Name";
+            th2.innerText = "Is present";
+            tr.append(th1, th2);
+            table.appendChild(tr);
+
+            for (let i = 0; i < group.length; i++) {
+                let tr2 = document.createElement("tr");
+                let td = document.createElement("td");
+                td.innerText = group[i].fullName
+
+                let td2 = document.createElement("td");
+                let checkBox = document.createElement("input");
+                checkBox.setAttribute("type", "checkbox");
+                checkBox.checked = group[i].checked;
+                td2.appendChild(checkBox);
+                tr2.append(td, td2);
+                table.appendChild(tr2);
+            }
+
+            let button = document.createElement("button");
+            button.setAttribute("id", "save");
+            button.innerText = "Save";
+            button.style.width = 94 + "%";
+            button.addEventListener("click", clickHandlerSave);
+            div.append(table, button);
+
+        }
+
+        document.querySelector("section").appendChild(div);
+
+        }
+    </script>
+</head>
+<body>
+<main>
+    <section>
+        <label for="groups">Group:</label>
+        <select name="groups" id="groups"></select>
+
+        <label for="lessons">Lesson:</label>
+        <select name="lessons" id="lessons">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <button value="select" id="select">Select</button>
+        <hr>
+    </section>
+</main>
+
+</body>
+</html>
